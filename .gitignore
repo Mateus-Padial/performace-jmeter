@@ -1,0 +1,31 @@
+# Node / VSCode
+node_modules/
+.vscode/
+*.log
+
+# JMeter result files
+results/
+reports/
+*.jtl
+*.csv
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários / IDE
+*.tmp
+*.bak
+*.swp
+*.swo
+*.idea/
+*.iml
+
+# Build / compilação (caso use scripts)
+dist/
+build/
+
+# Configurações locais / variáveis
+.env
+*.local

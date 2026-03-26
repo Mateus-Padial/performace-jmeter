@@ -1,0 +1,57 @@
+name: JMeter Performance Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  jmeter-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Download and Install JMeter
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip
+        wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.zip
+        unzip apache-jmeter-5.6.3.zip
+        mv apache-jmeter-5.6.3 jmeter
+
+    - name: Clean previous results
+      run: |
+        rm -rf results
+        rm -rf reports
+        mkdir results reports
+
+    - name: Run JMeter Test
+      run: |
+        ./jmeter/bin/jmeter.sh -n \
+        -t test-plans/blazedemo-purchase.jmx \
+        -l results/results.jtl \
+        -e -o reports \
+        -Jduration=300
+
+    - name: Upload JMeter Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: jmeter-results
+        path: results/results.jtl
+
+    - name: Upload JMeter HTML Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: jmeter-html-report
+        path: reports
