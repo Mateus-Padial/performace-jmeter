@@ -33,25 +33,26 @@ jobs:
     - name: Clean previous results
       run: |
         rm -rf results
-        rm -rf reports
-        mkdir results reports
+        rm -rf test-report
+        mkdir results
+        mkdir test-report
 
     - name: Run JMeter Test
       run: |
         ./jmeter/bin/jmeter.sh -n \
-        -t test-plans/blazedemo-purchase.jmx \
-        -l results/results.jtl \
-        -e -o reports \
-        -Jduration=300
+          -t test-plans/blazedemo-purchase.jmx \
+          -l results/results.jtl \
+          -e -o test-report \
+          -Jduration=300
 
     - name: Upload JMeter Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: jmeter-results
         path: results/results.jtl
 
     - name: Upload JMeter HTML Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: jmeter-html-report
-        path: reports
+        path: test-report
